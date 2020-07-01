@@ -1,0 +1,26 @@
+﻿@page "/"
+@using SceneViewer
+
+<div id="index-3d-viewer">
+    @* No lighting for now. *@
+    <SceneView Environment=""
+               DisplayObjectUrl="3d/model.json"
+               SelectedObject=""
+               HighlightObjects="@dummyList"
+               OnObjectClicked="OnSceneViewObjectClicked" />
+
+</div>
+
+<WebSiteLink WebSiteName="@webSiteName" />
+
+
+@code {
+
+    IEnumerable<string> dummyList => new List<string>();
+    string webSiteName = string.Empty;
+
+    void OnSceneViewObjectClicked(string objectName)
+    {
+        webSiteName = objectName;
+    }
+}

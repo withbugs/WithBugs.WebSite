@@ -1,0 +1,32 @@
+﻿@if (!String.IsNullOrEmpty(WebSiteName))
+{
+    <a href="@url" target="_blank">Open @WebSiteName</a>
+}
+
+@code {
+    [Parameter] public String WebSiteName { get; set; }
+    string url;
+
+    protected override void OnParametersSet()
+    {
+        url = string.Empty;
+
+        if (String.IsNullOrEmpty(WebSiteName)) return;
+
+        if (WebSiteName.Equals("twitter", StringComparison.InvariantCultureIgnoreCase))
+        {
+            url = "https://twitter.com/with_bugs";
+        }
+        else if (WebSiteName.Equals("youtube", StringComparison.InvariantCultureIgnoreCase))
+        {
+            url = "https://www.youtube.com/channel/UCJZeq1xYxpLn_SlOUnQ8XOA";
+        }
+        else if (WebSiteName.Equals("instagram", StringComparison.InvariantCultureIgnoreCase))
+        {
+            url = "https://www.instagram.com/withbugs/";
+        }
+
+        //StateHasChanged();
+    }
+
+}
