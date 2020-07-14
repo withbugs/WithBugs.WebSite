@@ -1,23 +1,13 @@
 ﻿@page "/"
+@implements IDisposable
 @inject IJSRuntime JSRuntime
-@using SceneViewer
 
 <div id="index-3d-viewer">
 
 </div>
 
-<WebSiteLink WebSiteName="@webSiteName" />
-
 
 @code {
-
-    IEnumerable<string> dummyList => new string[0];
-    string webSiteName = string.Empty;
-
-    void OnSceneViewObjectClicked(string objectName)
-    {
-        webSiteName = objectName;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -27,4 +17,8 @@
         }
     }
 
+    public void Dispose()
+    {
+        JSRuntime.InvokeVoidAsync("appJsFunctions.cleanup");
+    }
 }
