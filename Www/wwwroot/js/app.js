@@ -5,6 +5,81 @@ import { RoomEnvironment } from '/js/threejs/environments/RoomEnvironment.js';
 var stopAnimation;
 var resizeHandler;
 
+function createPastureBackgroundTexture() {
+    var canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 1024;
+
+    var ctx = canvas.getContext('2d');
+    var sky = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.7);
+    sky.addColorStop(0, '#1b75d0');
+    sky.addColorStop(0.45, '#6cb7ff');
+    sky.addColorStop(1, '#d9f4ff');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    function cloud(x, y, scale, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(x, y, 96 * scale, 26 * scale, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 74 * scale, y - 8 * scale, 64 * scale, 22 * scale, 0, 0, Math.PI * 2);
+        ctx.ellipse(x - 62 * scale, y - 6 * scale, 54 * scale, 19 * scale, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    cloud(380, 160, 1.1, 0.72);
+    cloud(1240, 118, 0.8, 0.58);
+    cloud(1710, 260, 1.25, 0.62);
+
+    var distantHill = ctx.createLinearGradient(0, canvas.height * 0.45, 0, canvas.height);
+    distantHill.addColorStop(0, '#70c757');
+    distantHill.addColorStop(1, '#238226');
+    ctx.fillStyle = distantHill;
+    ctx.beginPath();
+    ctx.moveTo(0, 690);
+    ctx.bezierCurveTo(360, 490, 700, 590, 1010, 510);
+    ctx.bezierCurveTo(1340, 426, 1650, 510, 2048, 424);
+    ctx.lineTo(2048, 1024);
+    ctx.lineTo(0, 1024);
+    ctx.closePath();
+    ctx.fill();
+
+    var nearHill = ctx.createLinearGradient(0, canvas.height * 0.55, 0, canvas.height);
+    nearHill.addColorStop(0, '#a8dd58');
+    nearHill.addColorStop(0.45, '#57ad28');
+    nearHill.addColorStop(1, '#146d1d');
+    ctx.fillStyle = nearHill;
+    ctx.beginPath();
+    ctx.moveTo(0, 792);
+    ctx.bezierCurveTo(360, 652, 640, 720, 930, 620);
+    ctx.bezierCurveTo(1270, 498, 1540, 620, 2048, 544);
+    ctx.lineTo(2048, 1024);
+    ctx.lineTo(0, 1024);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalAlpha = 0.28;
+    ctx.strokeStyle = '#f2ffd5';
+    ctx.lineWidth = 2;
+    for (var i = 0; i < 120; i++) {
+        var x = (i * 73) % canvas.width;
+        var y = 650 + ((i * 47) % 330);
+        ctx.beginPath();
+        ctx.moveTo(x, y + 20);
+        ctx.quadraticCurveTo(x + 22, y - 16, x + 58, y + 4);
+        ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    var texture = new THREE.CanvasTexture(canvas);
+    texture.encoding = THREE.sRGBEncoding;
+    texture.anisotropy = 4;
+    return texture;
+}
+
 window.appJsFunctions = {
 
     cleanup: function () {
@@ -49,9 +124,9 @@ window.appJsFunctions = {
         var pmremGenerator = new THREE.PMREMGenerator(renderer);
 
         var scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xeeeeee);
+        scene.background = createPastureBackgroundTexture();
         scene.environment = pmremGenerator.fromScene(environment).texture;
-        scene.fog = new THREE.Fog(0xeeeeee, 10, 50);
+        scene.fog = new THREE.Fog(0xd9f4ff, 14, 55);
 
         var grid = new THREE.GridHelper(100, 40, 0x000000, 0x000000);
         grid.material.opacity = 0.1;
