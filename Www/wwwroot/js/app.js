@@ -128,12 +128,6 @@ window.appJsFunctions = {
         scene.environment = pmremGenerator.fromScene(environment).texture;
         scene.fog = new THREE.Fog(0xd9f4ff, 14, 55);
 
-        var grid = new THREE.GridHelper(100, 40, 0x000000, 0x000000);
-        grid.material.opacity = 0.1;
-        grid.material.depthWrite = false;
-        grid.material.transparent = true;
-        scene.add(grid);
-
         var model;
 
         var loader = new THREE.ObjectLoader();
