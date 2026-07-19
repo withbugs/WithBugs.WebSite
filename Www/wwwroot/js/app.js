@@ -359,6 +359,7 @@ function createXLogoMesh(sourceMesh) {
     logo.userData.clickName = 'X';
     logo.visible = false;
     logo.position.copy(sourceMesh.position);
+    logo.position.x += 0.14;
     logo.quaternion.copy(sourceMesh.quaternion);
     logo.scale.copy(sourceMesh.scale);
 
