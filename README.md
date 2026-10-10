@@ -1,4 +1,50 @@
 # WithBugs.WebSite
-Source code repo for With Bugs' Website on GitHub Pages(https://withbugs.github.io/).
 
-Build and publish this repo on the local machine, then push to github page above from desktop manually so far.
+With Bugsのホームページを開発するリポジトリです。GitHub Pagesの公開用成果物は別リポジトリ`withbugs.github.io`で管理しています。
+
+## 開発環境
+
+- Blazor WebAssembly / .NET 10 LTS
+- Microsoft.AspNetCore.Components.WebAssembly 10.0.12
+- Three.js 0.186.1（公式npm配布のモジュールを`Www/wwwroot/js/threejs`に同梱。MITライセンスも同ディレクトリに保存）
+- ローカルプレビュー用にPython 3
+
+`global.json`で.NET 10 SDKを選びます。このPC用のポータブルSDKは、Git管理外の`artifacts/dotnet-sdk`に置いてあります。
+
+## ローカル確認
+
+PowerShellでリポジトリのルートから実行します。
+
+```powershell
+.\scripts\preview.ps1
+```
+
+ビルド済みの画面を開くだけなら、次のコマンドを使います。
+
+```powershell
+.\scripts\preview.ps1 -NoBuild
+```
+
+接続先は`http://127.0.0.1:8765/`です。終了はCtrl+C。ポートは`-Port 8766`などで指定できます。SDKを別の場所に置く場合は`-DotnetPath`で指定します。
+
+このスクリプトはローカル用成果物を`artifacts/local-preview-net10`に生成し、このPCだけからアクセスできるサーバーを起動します。公開用リポジトリの更新やpushは行いません。
+
+## 3D画面
+
+初期表示は手前の左斜めから見渡す近めのアングルで、余白を減らすため全体を約2割ズームしています。モードの切替はありません。右下の小さい「i」を押すと操作方法を表示します。
+
+- ロゴをクリック／タップするとリンク先を開きます。
+- 地面をクリック／タップすると、その方向へ少しずつ滑らかに移動します。一度に小さい一歩だけ進み、押した地点の手前で止まります。
+- 左ドラッグでその場から見回し、右ドラッグまたはShift＋ドラッグで平行移動します。
+- ホイールで前後に移動します。Shift＋ホイールは左右の移動です。
+- 画面にフォーカスしてWASD／矢印キーで前後左右、Q／Eで上下に移動できます。
+- タッチは1本指で見回し、2本指で平行移動とピンチによる前後移動ができます。
+- 最初の全体表示に戻るにはページを再読み込みします。
+
+追加した4サイトは`Www/wwwroot/js/public-sites.js`で管理しています。廃止したBotの場所（二列目）にファッションを移し、残る3サイトは最前列のX・YouTube・Instagramと列が揃うように最奥へ配置し、YouTubeやInstagramのサイズに合わせています。ファッションはページ内の重なった`wb`マーク、住人たちは既存の家と笑顔、15パズルは既存の3枚タイルを立体化しました。家と冒険には背景板を付けず、パズルは細い外枠と3枚タイルだけで右下や隙間は実際の空洞です。冒険の本と道しるべはサイト共通の新しいマークです。住人の人数や特定のキャラクターには依存しません。
+
+今後サイトを追加するときは、`PUBLIC_SITES`にタイトルとURLを追加し、対応するアイコン生成と配置も調整します。3Dの表示・当たり判定は`app.js`、移動と入力処理は`scene-navigation.js`にあります。
+
+## 公開
+
+ローカル確認を終えてから、新しく発行した`wwwroot`の内容を公開用リポジトリへ反映します。古いフレームワークのファイルと混ざらないよう、新しい成果物一式を使用してください。両リポジトリのcommit／pushやGitHub Pagesへの反映は、プレビュースクリプトとは別の操作です。

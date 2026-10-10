@@ -1,5 +1,5 @@
 ﻿@page "/"
-@implements IDisposable
+@implements IAsyncDisposable
 @inject IJSRuntime JSRuntime
 
 <div id="index-3d-viewer">
@@ -17,8 +17,8 @@
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        JSRuntime.InvokeVoidAsync("appJsFunctions.cleanup");
+        await JSRuntime.InvokeVoidAsync("appJsFunctions.cleanup");
     }
 }
